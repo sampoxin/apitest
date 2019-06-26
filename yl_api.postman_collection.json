@@ -1,0 +1,973 @@
+{
+	"info": {
+		"_postman_id": "f323476e-dc1b-4f92-ab72-870b20957a68",
+		"name": "雨聊自动化场景",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "登陆 - 添加好友",
+			"item": [
+				{
+					"name": "登陆",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1d9e2b74-e1b2-4c8f-99ca-50ee3f588f36",
+								"exec": [
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"成功\");",
+									"});",
+									"",
+									"var jsondata = JSON.parse(responseBody);",
+									"pm.environment.set(\"token\", jsondata.data.token);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "login_type",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "mobile",
+									"value": "{{mobile}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "888888",
+									"type": "text"
+								},
+								{
+									"key": "code",
+									"value": "5566",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "member",
+									"value": "17652486688",
+									"type": "text"
+								},
+								{
+									"key": "device_id",
+									"value": "8888888",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/Login/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"Login",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "好友搜索",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "045e8d31-4332-484a-9512-575ec0b70628",
+								"exec": [
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message).to.eql(\"成功\");",
+									"});",
+									"",
+									"var jsondata = JSON.parse(responseBody);",
+									"var a = jsondata.data.data.length -1 ;",
+									"",
+									"pm.environment.set(\"addfriend\", jsondata.data.data[a].uid);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "1588645"
+								},
+								{
+									"key": "type",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "pay_password",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/Friend/searchFriend",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"Friend",
+								"searchFriend"
+							]
+						},
+						"description": "type：1从好友中搜索，2系统搜索"
+					},
+					"response": []
+				},
+				{
+					"name": "添加好友",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "44617a73-e346-4c8c-96aa-d6cabf6c2b57",
+								"exec": [
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"申请成功\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "text"
+								},
+								{
+									"key": "from_id",
+									"value": "{{addfriend}}",
+									"type": "text"
+								},
+								{
+									"key": "msg",
+									"value": "申请好友添加",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/Friend/ApplyFriend",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"Friend",
+								"ApplyFriend"
+							]
+						},
+						"description": "申请添加好友"
+					},
+					"response": []
+				},
+				{
+					"name": "好友申请列表",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9923b0f0-ae6f-44c4-aff7-c12d939a461a",
+								"exec": [
+									"var jsondata = JSON.parse(responseBody);",
+									"if ( jsondata.message == \"成功\" ) {",
+									"        tests[\"成功\"]=true;",
+									"    }"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/Friend/FriendListLog?token={{token}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"Friend",
+								"FriendListLog"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							]
+						},
+						"description": "查看添加好友的申请"
+					},
+					"response": []
+				},
+				{
+					"name": "我的好友列表",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5b20019f-e401-4a78-8dcb-9e08dcf75254",
+								"exec": [
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"成功\");",
+									"});",
+									"",
+									"var count = JSON.parse(responseBody);",
+									"var len = count.data[0].list.length",
+									"console.log(\"我的好友数：\" + len)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/Friend/FriendList",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"Friend",
+								"FriendList"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "退出登陆",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "228b7f0f-cc3f-4349-a09c-3635c9666648",
+								"exec": [
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"成功\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/User/SignOut",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"User",
+								"SignOut"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "注册会员- 登陆账户 - 添加好友 - 返回我的好友列表 - 退出账户",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "9528d4aa-8d5b-4b43-b01d-765a3aea434d",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "8a804b1c-816d-468d-b7cd-dc0acf1cbc8c",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "好友聊天",
+			"item": [
+				{
+					"name": "登陆",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "74fc704a-0d44-4138-9c00-762be789e64d",
+								"exec": [
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"成功\");",
+									"});",
+									"",
+									"var jsondata = JSON.parse(responseBody);",
+									"pm.environment.set(\"token\", jsondata.data.token);",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "login_type",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "mobile",
+									"value": "15886453503",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "text"
+								},
+								{
+									"key": "code",
+									"value": "5566",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "member",
+									"value": "{{addfriend}}",
+									"type": "text"
+								},
+								{
+									"key": "device_id",
+									"value": "888888",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/Login/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"Login",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "好友申请列表",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "714936ad-fb63-4786-a3de-102cb218734b",
+								"exec": [
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message).to.eql(\"成功\");",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"application_id\", jsonData.data.data[0].id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/Friend/FriendListLog?token={{token}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"Friend",
+								"FriendListLog"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							]
+						},
+						"description": "查看添加好友的申请"
+					},
+					"response": []
+				},
+				{
+					"name": "好友审核",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "27ffe026-ab62-4420-9b37-4231252384fd",
+								"exec": [
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message).to.eql(\"操作成功\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "text"
+								},
+								{
+									"key": "id",
+									"value": "{{application_id}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "2",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/Friend/AddFriend",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"Friend",
+								"AddFriend"
+							]
+						},
+						"description": "审核好友申请;\ntype\t是\tint\t1拒绝，2通过;"
+					},
+					"response": []
+				},
+				{
+					"name": "我的好友列表",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fbd378f7-ca31-4f72-b874-489b05fa3886",
+								"exec": [
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data[0].class_name).to.eql(\"我的好友\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/Friend/FriendList",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"Friend",
+								"FriendList"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "添加好友分组",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "84d6eb53-1af9-47ef-88bf-326e32dd6cd9",
+								"exec": [
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message).to.eql(\"添加成功\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "class_name",
+									"value": "接口测试组",
+									"type": "text"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/Friend/addClass",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"Friend",
+								"addClass"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "修改好友备注",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "78772df7-cc5c-4d8d-a994-fde3a41f2bab",
+								"exec": [
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message).to.eql(\"修改成功\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "text"
+								},
+								{
+									"key": "from_id",
+									"value": "{{mobile}}",
+									"type": "text"
+								},
+								{
+									"key": "mark_name",
+									"value": "林更新",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/Friend/EditFriend",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"Friend",
+								"EditFriend"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "我的好友列表",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fbd378f7-ca31-4f72-b874-489b05fa3886",
+								"exec": [
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data[0].class_name).to.eql(\"我的好友\");",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"class_id\", jsonData.data[1].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/Friend/FriendList",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"Friend",
+								"FriendList"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "修改好友分组",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "20b1671b-6593-4b4d-b1ba-7e4a9d103257",
+								"exec": [
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message).to.eql(\"修改成功\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "text"
+								},
+								{
+									"key": "from_id",
+									"value": "{{mobile}}",
+									"type": "text"
+								},
+								{
+									"key": "class_id",
+									"value": "{{class_id}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://qq1.9750.com/api/Friend/EditClass",
+							"protocol": "http",
+							"host": [
+								"qq1",
+								"9750",
+								"com"
+							],
+							"path": [
+								"api",
+								"Friend",
+								"EditClass"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "发送消息",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4b13021d-6e1b-44ce-b193-1105acfdf10a",
+								"exec": [
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message).to.eql(\"成功\");",
+									"});",
+									"",
+									"pm.test(\"发送消息成功\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.jg_info.http_code).to.eql(201);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "999c5ac9-0b99-4b45-bb91-d29acc411746",
+								"exec": [
+									"pm.environment.set(\"nowtime\", new Date());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/chat/Chat?token={{token}}&type=1&from_id={{mobile}}&msg_type=1&content=hello！！！！！很高兴认识你！！！{{nowtime}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"chat",
+								"Chat"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{token}}"
+								},
+								{
+									"key": "type",
+									"value": "1"
+								},
+								{
+									"key": "from_id",
+									"value": "{{mobile}}"
+								},
+								{
+									"key": "msg_type",
+									"value": "1"
+								},
+								{
+									"key": "content",
+									"value": "hello！！！！！很高兴认识你！！！{{nowtime}}"
+								},
+								{
+									"key": "file_id",
+									"value": "",
+									"disabled": true
+								}
+							]
+						},
+						"description": "type是\tint\t类型：1，单聊；2，群聊\r\n\r\nfrom_id是\tstring\t消息接收方(单聊为好友uid,群聊为群id)\r\n\r\nmsg_type是\tint\t消息类型 1：文字，2：图片，3：视频，4：红包，5：语音"
+					},
+					"response": []
+				},
+				{
+					"name": "退出登陆",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "64b74be8-6dfd-4877-9c2a-b1f89bbcf9ed",
+								"exec": [
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message).to.eql(\"成功\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/User/SignOut",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"User",
+								"SignOut"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "登陆 - 查看好友申请列表 - 同意申请 - 修改好友备注 - 添加分组 - 修改好友分组 - 查看我的好友 - 发送消息  - 退出登陆\n"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "7517bedf-3300-4903-bf87-e8f6069060b2",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "3d10d5a0-a737-47cb-90b7-245272799714",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "c67bb005-95fd-498d-9d7a-715a1a87c870",
+			"key": "mobile",
+			"value": "15886453515",
+			"type": "string",
+			"disabled": true
+		}
+	]
+}
